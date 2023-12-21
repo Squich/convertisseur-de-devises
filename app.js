@@ -57,25 +57,4 @@ createApp({
 			exchangeRate,
 		};
 	},
-	template: `
-		<header>
-			<h1>Taux de conversion</h1>
-		</header>
-		<main>
-			<div id="base-container">
-				<label for="baseCurrency">Devise de base</label>
-				<select v-model="baseCurrency">
-					<option v-for="code in supportedCodes" :key="code[0]" :value="code[0]">{{ code[1] }} - {{ code[0] }}</option>
-				</select>
-				<p class="number">1</p>
-			</div>
-			<div id="target-container">
-				<label for="targetCurrency">Devise cible</label>
-				<select v-model="targetCurrency">
-					<option v-for="code in supportedCodes" :key="code[0]" :value="code[0]">{{ code[1] }} - {{ code[0] }}</option>
-				</select>
-				<p class="number">{{exchangeRate}}</p>
-			</div>
-		</main>	
-	`,
 }).mount('#app');

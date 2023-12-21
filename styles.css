@@ -29,6 +29,9 @@ body {
 	box-shadow: 0 24px 32px -16px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 }
+#app[v-cloak] {
+	display: none;
+}
 header,
 main {
 	padding-left: calc(1vw + 15px);
