@@ -5,56 +5,66 @@ createApp({
 		const apiKey = '6841178b3ff0897aa27d7b56';
 		const baseCurrency = ref('USD');
 		const targetCurrency = ref('USD');
-		const dataConversionRates = ref(null);
-		const supportedCodes = ref([]);
+		const supportedCodes = ref();
+		const conversionRates = ref();
+
+		const isLoadingSupportedCodes = ref(true);
+		const isLoadingConversionRates = ref(true);
+		const errorFetchingSupportedCodes = ref(false);
+		const errorFetchingConversionRates = ref(false);
+
+		const isLoading = computed(() => isLoadingSupportedCodes.value || isLoadingConversionRates.value);
+		const error = computed(() => errorFetchingSupportedCodes.value || errorFetchingConversionRates.value);
 
 		const exchangeRate = computed(() => {
-			return dataConversionRates.value ? dataConversionRates.value[targetCurrency.value] || 1 : 1;
+			return conversionRates.value ? conversionRates.value[targetCurrency.value] : 1;
 		});
 
-		const fetchDataSupportedCodes = async () => {
-			const requestString = `https://v6.exchangerate-api.com/v6/${apiKey}/codes`;
+		const fetchSupportedCodes = async () => {
+			isLoadingSupportedCodes.value = true;
 			try {
-				const response = await fetch(requestString);
-				if (!response.ok) {
-					throw new Error(`Erreur lors de la requête vers l'API: ${response.status} ${response.statusText}`);
-				} else {
-					const data = await response.json();
-					supportedCodes.value = data.supported_codes;
-					console.log("Les devises ont été récupérées depuis l'API avec succès");
-				}
+				const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/codes`);
+				const data = await response.json();
+				supportedCodes.value = data.supported_codes;
+				errorFetchingSupportedCodes.value = false;
+				console.log('Chargement des devises OK');
 			} catch (err) {
-				console.error(`Erreur lors de la requête vers l'API : ${err.message}`);
+				supportedCodes.value = undefined;
+				errorFetchingSupportedCodes.value = true;
+				console.error(`Chargement des devises KO : ${err.message}`);
 			}
+			isLoadingSupportedCodes.value = false;
 		};
 
-		const fetchDataConversionRates = async base => {
-			const requestString = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${base}`;
+		const fetchConversionRates = async base => {
+			isLoadingConversionRates.value = true;
 			try {
-				const response = await fetch(requestString);
-				if (!response.ok) {
-					throw new Error(`Erreur lors de la requête vers l'API: ${response.status} ${response.statusText}`);
-				} else {
-					const data = await response.json();
-					dataConversionRates.value = data.conversion_rates;
-					console.log("Les taux de change ont été récupérés depuis l'API avec succès");
-				}
+				const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/${base}`);
+				const data = await response.json();
+				conversionRates.value = data.conversion_rates;
+				errorFetchingConversionRates.value = false;
+				console.log('Chargement des taux de change OK');
 			} catch (err) {
-				console.error(`Erreur lors de la requête vers l'API : ${err.message}`);
+				conversionRates.value = undefined;
+				errorFetchingConversionRates.value = true;
+				console.error(`Chargement des taux de change KO : ${err.message}`);
 			}
+			isLoadingConversionRates.value = false;
 		};
 
 		watchEffect(() => {
-			fetchDataConversionRates(baseCurrency.value);
+			fetchConversionRates(baseCurrency.value);
 		});
 
-		fetchDataSupportedCodes();
+		fetchSupportedCodes();
 
 		return {
 			baseCurrency,
 			targetCurrency,
 			supportedCodes,
 			exchangeRate,
+			isLoading,
+			error,
 		};
 	},
 }).mount('#app');
