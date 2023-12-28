@@ -86,7 +86,7 @@ h1 {
 	width: 50px;
 	height: 50px;
 	border-radius: 50px;
-	background-image: url('./images/convert-arrows.png'), linear-gradient(90deg, #45aeff, #a9daff);
+	background-image: url('./images/convert-arrows.svg'), linear-gradient(90deg, #45aeff, #a9daff);
 	background-position: center;
 	background-size: 24px, auto;
 	background-repeat: no-repeat;
@@ -97,7 +97,7 @@ h1 {
 	box-shadow: 0 4px 16px -2px #c0e4ff;
 }
 #base-currency-container.is-loading::after {
-	background-image: url('./images/hourglass.png'), linear-gradient(90deg, #45aeff, #a9daff);
+	background-image: url('./images/hourglass.svg'), linear-gradient(90deg, #45aeff, #a9daff);
 }
 label {
 	font-size: 1em;
