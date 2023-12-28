@@ -17,7 +17,7 @@
 			<main>
 				<p v-if="error" class="info-error">Erreur de chargement des données !</p>
 				<div id="currencies-container">
-					<div id="base-currency-container" :class="{'is-loading' : isLoading}">
+					<div id="base-currency-container" :class="{ 'is-loading': isLoading }">
 						<label for="base-currency-select">Devise de base</label>
 						<select id="base-currency-select" v-model="baseCurrency">
 							<option v-for="code in supportedCodes" :key="code[0]" :value="code[0]">{{ code[1] }} - {{ code[0] }}</option>
@@ -29,7 +29,7 @@
 						<select id="target-currency-select" v-model="targetCurrency">
 							<option v-for="code in supportedCodes" :key="code[0]" :value="code[0]">{{ code[1] }} - {{ code[0] }}</option>
 						</select>
-						<p class="number">{{exchangeRate}}</p>
+						<p class="number">{{ exchangeRate }}</p>
 					</div>
 				</div>
 			</main>

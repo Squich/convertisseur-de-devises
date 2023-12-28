@@ -25,6 +25,9 @@ createApp({
 			try {
 				const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/codes`);
 				const data = await response.json();
+				if (data.result === 'error') {
+					throw new Error(`Échec de la requête (${data['error-type']})`);
+				}
 				supportedCodes.value = data.supported_codes;
 				errorFetchingSupportedCodes.value = false;
 				console.log('Chargement des devises OK');
@@ -41,6 +44,9 @@ createApp({
 			try {
 				const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/${base}`);
 				const data = await response.json();
+				if (data.result === 'error') {
+					throw new Error(`Échec de la requête (${data['error-type']})`);
+				}
 				conversionRates.value = data.conversion_rates;
 				errorFetchingConversionRates.value = false;
 				console.log('Chargement des taux de change OK');
